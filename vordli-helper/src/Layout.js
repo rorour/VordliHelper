@@ -1,11 +1,29 @@
-import { Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 
 const Layout = () => {
     return ( 
         <div>
-            <div>header here</div>
+            <Header />
             <Outlet />
-            <div>footer here</div>
+            <Footer />
+        </div>
+     );
+}
+
+const Header = () => {
+    return ( 
+        <div>
+            <div>header</div>
+            <Link to='/'>link to home </Link>
+            <Link to='/bbb'>invalid link</Link>
+        </div>
+     );
+}
+
+const Footer = () => {
+    return ( 
+        <div>
+            <div>footer</div>
         </div>
      );
 }
