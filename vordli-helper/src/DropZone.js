@@ -1,5 +1,6 @@
 // DropZone.js adapted from https://www.geeksforgeeks.org/implement-drag-and-drop-using-react-component/
 import { useDrop } from 'react-dnd';
+import DragItem from './DragItem';
 
 const DropZone = ({ onDrop }) => {
     const [{ isOver }, drop] = useDrop(() => ({
@@ -18,6 +19,7 @@ const DropZone = ({ onDrop }) => {
                 padding: '10px',
             }}>
             Drop here
+            {/* <DragItem name="Item 5" /> */}
         </div>
     );
 };

@@ -1,10 +1,10 @@
 //DragItem.js adapted from https://www.geeksforgeeks.org/implement-drag-and-drop-using-react-component/
 import { useDrag } from 'react-dnd';
 
-const DragItem = ({ name }) => {
+const DragItem = ({ name, origin }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'item',
-        item: { name },
+        item: { name, origin },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),

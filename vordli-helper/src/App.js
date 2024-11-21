@@ -6,7 +6,12 @@ import NotFound from './NotFound';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_relativeSplatPath: false,
+        v7_startTransition: false,
+      }}
+    >
       <div className="App">
           <Routes>
             <Route path="/" element={ <Layout /> }> 
