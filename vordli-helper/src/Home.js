@@ -13,46 +13,30 @@ const Home = () => {
 }
 
 const QueryBuilder = () => {
-    const letterFields = Object.freeze({
-        availableAlphabet: Symbol("availableAlphabet"),
-        yellowLetters: Symbol("yellowLetters"),
-        grayLetters: Symbol("grayLetters"),
-    })
+    const letterFields = {
+        AVAILABLE_ALPHABET: "availableAlphabet",
+        YELLOW_LETTERS: "yellowLetters",
+        GRAY_LETTERS: "grayLetters",
+    };
     const fullAlphabet = ["a", "b", "c", "d", "e"]
     const [availableAlphabet, setAvailableAlphabet] = useState(fullAlphabet);
     const [yellowLetters, setYellowLetters] = useState([]);
     const [grayLetters, setGrayLetters] = useState([]);
 
-    const [droppedItems, setDroppedItems] = useState([]); //delete
-
-
-
-    useEffect(() => {
-        console.log(yellowLetters)
-     }, [yellowLetters])
-
-    const handleDrop = (item) => {
-        // todo all drops should remove from other arrays
-        // todo delete me
-    };
-
     const removeOriginLetter = (item) => {
-        console.log("removing", item);
         let getter = null;
         let setter = null;
         switch (item.origin) {
-            case letterFields.availableAlphabet:
+            case letterFields.AVAILABLE_ALPHABET:
                 getter = availableAlphabet;
                 setter = setAvailableAlphabet;
         }
-// wtf is happening, some kind of caching?
-        const updatedItems = [...getter];
-        console.log("before", updatedItems);
-        console.log("index", updatedItems.indexOf(item.name));
-        updatedItems.splice(updatedItems.indexOf(item.name), 1);
-        console.log("after", updatedItems);
-        setter(updatedItems);
-
+        setter(prevItems => {
+            let updatedItems = [...prevItems]
+            console.log('index of', item.name, updatedItems.indexOf(item.name));
+            updatedItems.splice(updatedItems.indexOf(item.name), 1);
+            return updatedItems;
+        });
     };
 
     const handleAlphabetDrop = (item) => {
@@ -60,7 +44,7 @@ const QueryBuilder = () => {
     };
 
     const handleYellowDrop = (item) => {
-        console.log("item with origin dropped to yellow", item.origin)
+        console.log("111", item);
         removeOriginLetter(item);
         setYellowLetters((prevItems) => [...prevItems, item.name]);
     };
@@ -69,12 +53,19 @@ const QueryBuilder = () => {
         setGrayLetters((prevItems) => [...prevItems, item]);
     };
 
-    const handleRemoveItem = (index) => {
-        // TODO remove item from respective array
-        // const updatedItems = [...droppedItems];
-        // updatedItems.splice(index, 1);
-        // setDroppedItems(updatedItems);
+    const handleRemoveItem = (index, setter) => {
+        setter(prevItems => {
+            let updatedItems = [...prevItems]
+            updatedItems.splice(index, 1);
+            return updatedItems;
+        });
     };
+
+    useEffect(() => {
+        console.log("updated availableAlphabet", availableAlphabet)
+
+
+    }, [availableAlphabet])
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -82,12 +73,13 @@ const QueryBuilder = () => {
                 <div className="yellowLetters">
                     <h3>yellow letters</h3>
                     <DropZone onDrop={handleYellowDrop} />
-                    { yellowLetters.map((item, index) => (
+                    { yellowLetters.map((value, index) => (
                         // todo this should probably  be a component.
-                        //todo see if i can change name to value
                         <div key={index} className="YellowLetter">
-                            { item }                         <button onClick={
-                            () => handleRemoveItem(index)}>
+                            { value }                         
+                            <button onClick={() => 
+                                handleRemoveItem(value, setYellowLetters)}
+                            >
                             Remove
                         </button>, 
                         </div>
@@ -96,11 +88,13 @@ const QueryBuilder = () => {
                 </div>
                 <div className="availableAlphabet">
                     <h3>alphabet</h3>
-                    { availableAlphabet.map((item, index) => (
-                        <DragItem key={index} name={item} origin={ letterFields.availableAlphabet } />
-                    )) }
+                    { availableAlphabet.map((item, index) => {
+                        console.log("setting alphabet", item, index);
+                        return (
+                        <DragItem name={item} key={item} mykey={index} origin={ letterFields.AVAILABLE_ALPHABET } />
+                    )}) }
                 </div>
-                <div style={{
+                {/* <div style={{
                     border: '1px solid #ccc',
                     padding: '10px', borderRadius: '5px'
                 }}>
@@ -131,8 +125,8 @@ const QueryBuilder = () => {
                             <p>{item.name}</p>
 
                         </div>
-                    ))}
-                </div>
+                    ))} */}
+                {/* </div> */}
             </div>
         </DndProvider>
     );

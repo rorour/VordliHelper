@@ -8,8 +8,8 @@ const App = () => {
   return (
     <BrowserRouter
       future={{
-        v7_relativeSplatPath: false,
-        v7_startTransition: false,
+        v7_relativeSplatPath: true,
+        v7_startTransition: true,
       }}
     >
       <div className="App">

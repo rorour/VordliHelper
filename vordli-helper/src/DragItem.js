@@ -1,14 +1,25 @@
 //DragItem.js adapted from https://www.geeksforgeeks.org/implement-drag-and-drop-using-react-component/
+import { useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 
-const DragItem = ({ name, origin }) => {
+const DragItem = ({ name, mykey, origin }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'item',
-        item: { name, origin },
+        item: { name, mykey, origin },
+        // end: (item, monitor) => {
+        //     const dropResult = monitor.getDropResult();
+        //     if (item && dropResult) {
+        //       alert(`You dropped ${item} ${selectedTreeNodes} into ${dropResult}!`);
+        //     }
+        //   },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
     }));
+
+    useEffect(() => {
+        console.log("isDragging", isDragging, name, mykey);
+    }, [isDragging, name]);
 
     return (
         <div

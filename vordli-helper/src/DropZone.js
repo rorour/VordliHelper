@@ -1,6 +1,8 @@
 // DropZone.js adapted from https://www.geeksforgeeks.org/implement-drag-and-drop-using-react-component/
+import { useEffect } from 'react'
 import { useDrop } from 'react-dnd';
 import DragItem from './DragItem';
+import React from 'react';
 
 const DropZone = ({ onDrop }) => {
     const [{ isOver }, drop] = useDrop(() => ({
@@ -10,6 +12,10 @@ const DropZone = ({ onDrop }) => {
             isOver: monitor.isOver(),
         }),
     }));
+
+useEffect(() => {
+    console.log(isOver);
+}, [isOver]);
 
     return (
         <div
