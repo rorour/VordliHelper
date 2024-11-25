@@ -2,25 +2,38 @@
 import { useDrop } from 'react-dnd';
 import DragItem from './DragItem';
 
-const DropZone = ({ onDrop }) => {
+const DropZone = ({ props }) => {
     const [{ isOver }, drop] = useDrop(() => ({
         accept: 'item',
-        drop: (item) => onDrop(item),
+        drop: (item) => props.onDrop(item),
         collect: (monitor) => ({
             isOver: monitor.isOver(),
         }),
     }));
 
     return (
-        <div
-            ref={drop}
-            style={{
-                border: `1px dashed ${isOver ? 'green' : 'black'}`,
-                padding: '10px',
-            }}>
-            Drop here
-            {/* <DragItem value="Item 5" /> */}
+        <div className={ props.outerClass }>
+            <h3>{ props.title }</h3>
+            <div
+                ref={drop}
+                style={{
+                    border: `1px dashed ${isOver ? 'green' : 'black'}`,
+                    padding: '10px',
+                }}>
+                Drop here
+
+                { props.getter.map((value) => (
+                    <div key={value} className={ props.innerClass }>
+                        <DragItem value={value} key={value} origin={ props.origin} />
+                        <button onClick={() => props.handleRemoveItem(value, props.setter)}> Remove </button>, 
+                    </div>
+
+                )) }
+                {/* <DragItem value="Item 5" /> */}
+            </div>
         </div>
+
+
     );
 };
 

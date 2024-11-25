@@ -11,7 +11,7 @@ const Home = () => {
         </div>
      );
 }
-
+ 
 const QueryBuilder = () => {
     const letterFields = {
         AVAILABLE_ALPHABET: "availableAlphabet",
@@ -24,32 +24,16 @@ const QueryBuilder = () => {
     const [grayLetters, setGrayLetters] = useState([]);
 
     const removeOriginLetter = (item) => {
-        let getter = null;
-        let setter = null;
-        switch (item.origin) {
-            case letterFields.AVAILABLE_ALPHABET:
-                getter = availableAlphabet;
-                setter = setAvailableAlphabet;
-        }
-        setter(prevItems => {
+        getLetterZoneProps(item.origin).setter(prevItems => {
             let updatedItems = [...prevItems]
             updatedItems.splice(updatedItems.indexOf(item.value), 1);
             return updatedItems;
         });
     };
 
-    const handleAlphabetDrop = (item) => {
-        setAvailableAlphabet((prevItems) => [...prevItems, item]);
-    };
-
-    const handleYellowDrop = (item) => {
+    const handleDrop = (item, setter) => {
         removeOriginLetter(item);
-        setYellowLetters((prevItems) => [...prevItems, item.value]);
-    };
-
-    const handleGrayDrop = (item) => {
-        removeOriginLetter(item);
-        setGrayLetters((prevItems) => [...prevItems, item.value]);
+        setter((prevItems) => [...prevItems, item.value]);
     };
 
     const handleRemoveItem = (value, setter) => {
@@ -60,34 +44,39 @@ const QueryBuilder = () => {
         });
     };
 
+    const getLetterZoneProps = (origin) => {
+        switch (origin) {
+            case letterFields.AVAILABLE_ALPHABET:
+                return {
+                    getter: availableAlphabet,
+                    handleRemoveItem: handleRemoveItem,
+                    innerClass: "AlphabetLetter",
+                    onDrop: (item) => handleDrop(item, setAvailableAlphabet),
+                    origin: letterFields.AVAILABLE_ALPHABET,
+                    outerClass: "AvailableAlphabet",
+                    setter: setAvailableAlphabet,
+                    title: "avail letters abc",
+                };
+            case letterFields.YELLOW_LETTERS:
+                return {
+                    getter: yellowLetters,
+                    handleRemoveItem: handleRemoveItem,
+                    innerClass: "YellowLetter",
+                    onDrop: (item) => handleDrop(item, setYellowLetters),
+                    origin: letterFields.YELLOW_LETTERS,
+                    outerClass: "YellowLetters",
+                    setter: setYellowLetters,
+                    title: "yellow letters abc",
+                };
+        }
+
+    };
+
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className="QueryBuilder">
-                <div className="yellowLetters">
-                    <h3>yellow letters</h3>
-                    <DropZone onDrop={handleYellowDrop} />
-
-                    {/* // todo send haandleremove as closure */}
-                    { yellowLetters.map((value) => (
-                        // todo this should probably  be a component.
-                        <div key={value} className="YellowLetter">
-                            <DragItem value={value} key={value} origin={ letterFields.YELLOW_LETTERS } />
-                            <button onClick={() => 
-                                handleRemoveItem(value, setYellowLetters)}
-                            >
-                            Remove
-                        </button>, 
-                        </div>
-
-                    )) }
-                </div>
-                <div className="availableAlphabet">
-                    <h3>alphabet</h3>
-                    { availableAlphabet.map((item) => {
-                        return (
-                        <DragItem value={item} key={item} origin={ letterFields.AVAILABLE_ALPHABET } />
-                    )}) }
-                </div>
+            <div className="QueryBuilder">                    
+                <DropZone props={ getLetterZoneProps(letterFields.YELLOW_LETTERS) } />
+                <DropZone props={ getLetterZoneProps(letterFields.AVAILABLE_ALPHABET) } />
                 {/* <div style={{
                     border: '1px solid #ccc',
                     padding: '10px', borderRadius: '5px'
