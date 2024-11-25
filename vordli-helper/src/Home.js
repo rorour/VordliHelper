@@ -33,8 +33,7 @@ const QueryBuilder = () => {
         }
         setter(prevItems => {
             let updatedItems = [...prevItems]
-            console.log('index of', item.name, updatedItems.indexOf(item.name));
-            updatedItems.splice(updatedItems.indexOf(item.name), 1);
+            updatedItems.splice(updatedItems.indexOf(item.value), 1);
             return updatedItems;
         });
     };
@@ -44,28 +43,22 @@ const QueryBuilder = () => {
     };
 
     const handleYellowDrop = (item) => {
-        console.log("111", item);
         removeOriginLetter(item);
-        setYellowLetters((prevItems) => [...prevItems, item.name]);
+        setYellowLetters((prevItems) => [...prevItems, item.value]);
     };
 
     const handleGrayDrop = (item) => {
-        setGrayLetters((prevItems) => [...prevItems, item]);
+        removeOriginLetter(item);
+        setGrayLetters((prevItems) => [...prevItems, item.value]);
     };
 
-    const handleRemoveItem = (index, setter) => {
+    const handleRemoveItem = (value, setter) => {
         setter(prevItems => {
             let updatedItems = [...prevItems]
-            updatedItems.splice(index, 1);
+            updatedItems.splice(updatedItems.indexOf(value), 1);
             return updatedItems;
         });
     };
-
-    useEffect(() => {
-        console.log("updated availableAlphabet", availableAlphabet)
-
-
-    }, [availableAlphabet])
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -73,10 +66,12 @@ const QueryBuilder = () => {
                 <div className="yellowLetters">
                     <h3>yellow letters</h3>
                     <DropZone onDrop={handleYellowDrop} />
-                    { yellowLetters.map((value, index) => (
+
+                    {/* // todo send haandleremove as closure */}
+                    { yellowLetters.map((value) => (
                         // todo this should probably  be a component.
-                        <div key={index} className="YellowLetter">
-                            { value }                         
+                        <div key={value} className="YellowLetter">
+                            <DragItem value={value} key={value} origin={ letterFields.YELLOW_LETTERS } />
                             <button onClick={() => 
                                 handleRemoveItem(value, setYellowLetters)}
                             >
@@ -88,10 +83,9 @@ const QueryBuilder = () => {
                 </div>
                 <div className="availableAlphabet">
                     <h3>alphabet</h3>
-                    { availableAlphabet.map((item, index) => {
-                        console.log("setting alphabet", item, index);
+                    { availableAlphabet.map((item) => {
                         return (
-                        <DragItem name={item} key={item} mykey={index} origin={ letterFields.AVAILABLE_ALPHABET } />
+                        <DragItem value={item} key={item} origin={ letterFields.AVAILABLE_ALPHABET } />
                     )}) }
                 </div>
                 {/* <div style={{
