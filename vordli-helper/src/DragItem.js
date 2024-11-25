@@ -1,5 +1,7 @@
 //DragItem.js adapted from https://www.geeksforgeeks.org/implement-drag-and-drop-using-react-component/
 import { useDrag } from 'react-dnd';
+import './App.css';
+
 
 const DragItem = ({ value, origin }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -11,17 +13,9 @@ const DragItem = ({ value, origin }) => {
     }));
 
     return (
-        <div
-            ref={drag}
-            style={{
-                opacity: isDragging ? 0.5 : 1,
-                cursor: 'move',
-                border: '1px solid #ccc',
-                padding: '10px',
-                borderRadius: '5px',
-                margin: '5px',
-                backgroundColor: 'lightblue',
-            }}>
+        <div ref={drag} style={{
+            opacity: isDragging ? 0.5 : 1,
+        }}>
             {value}
         </div>
     );

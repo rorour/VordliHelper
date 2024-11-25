@@ -36,3 +36,54 @@
     transform: rotate(360deg);
   }
 }
+
+.Letter {
+  cursor: move;
+  border: 0px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.AlphabetLetter {
+  background-color: #121212;
+  color: #FFFEFC;
+}
+
+.GrayLetter {
+  background-color: #707070;
+  color: #454545
+}
+
+.YellowLetter {
+  background-color: #FEC64D;
+  color: #FFFEFC;
+}
+
+.GreenLetter {
+  background-color: #63C960;
+  color: #FFFEFC;
+}
+
+.DropArea {
+  background-color: #2F2F2F;
+  border: 5px solid black;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.DropAreaIsOver {
+  border: 5px solid red;
+}
+
+.MovedLetters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.QueryBuilder {
+  display: block;
+}

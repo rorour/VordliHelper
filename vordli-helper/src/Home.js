@@ -13,15 +13,16 @@ const Home = () => {
 }
  
 const QueryBuilder = () => {
+    const fullAlphabet = ["a", "b", "c", "d", "e"]
+    const [availableAlphabet, setAvailableAlphabet] = useState(fullAlphabet);
+    const [yellowLetters, setYellowLetters] = useState([]);
+    const [grayLetters, setGrayLetters] = useState([]);
+
     const letterFields = {
         AVAILABLE_ALPHABET: "availableAlphabet",
         YELLOW_LETTERS: "yellowLetters",
         GRAY_LETTERS: "grayLetters",
     };
-    const fullAlphabet = ["a", "b", "c", "d", "e"]
-    const [availableAlphabet, setAvailableAlphabet] = useState(fullAlphabet);
-    const [yellowLetters, setYellowLetters] = useState([]);
-    const [grayLetters, setGrayLetters] = useState([]);
 
     const removeOriginLetter = (item) => {
         getLetterZoneProps(item.origin).setter(prevItems => {
@@ -48,6 +49,7 @@ const QueryBuilder = () => {
         switch (origin) {
             case letterFields.AVAILABLE_ALPHABET:
                 return {
+                    allowDelete: false,
                     getter: availableAlphabet,
                     handleRemoveItem: handleRemoveItem,
                     innerClass: "AlphabetLetter",
@@ -55,10 +57,23 @@ const QueryBuilder = () => {
                     origin: letterFields.AVAILABLE_ALPHABET,
                     outerClass: "AvailableAlphabet",
                     setter: setAvailableAlphabet,
-                    title: "avail letters abc",
+                    title: false,
                 };
+                case letterFields.GRAY_LETTERS:
+                    return {
+                        allowDelete: true,
+                        getter: grayLetters,
+                        handleRemoveItem: handleRemoveItem,
+                        innerClass: "GrayLetter",
+                        onDrop: (item) => handleDrop(item, setGrayLetters),
+                        origin: letterFields.GRAY_LETTERS,
+                        outerClass: "GrayLetters",
+                        setter: setGrayLetters,
+                        title: "gray letters abc",
+                    };
             case letterFields.YELLOW_LETTERS:
                 return {
+                    allowDelete: true,
                     getter: yellowLetters,
                     handleRemoveItem: handleRemoveItem,
                     innerClass: "YellowLetter",
@@ -74,42 +89,18 @@ const QueryBuilder = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className="QueryBuilder">                    
-                <DropZone props={ getLetterZoneProps(letterFields.YELLOW_LETTERS) } />
+            <div className="QueryBuilder">  
+                <div className="MovedLetters">
+                    <div>
+                        green letters here
+                    </div>
+                    <div>
+                        <DropZone props={ getLetterZoneProps(letterFields.YELLOW_LETTERS) } />
+                        <DropZone props={ getLetterZoneProps(letterFields.GRAY_LETTERS) } />
+                    </div>
+                </div>      
+     
                 <DropZone props={ getLetterZoneProps(letterFields.AVAILABLE_ALPHABET) } />
-                {/* <div style={{
-                    border: '1px solid #ccc',
-                    padding: '10px', borderRadius: '5px'
-                }}>
-                    <h2>Drag Items</h2>
-                    <DragItem name="Item 1" />
-                    <DragItem name="Item 2" />
-                    <DragItem name="Item 3" />
-                </div>
-                <div style={{
-                    border: '1px solid #ccc',
-                    padding: '10px', borderRadius: '5px'
-                }}>
-                    <h2>Drop Zone</h2>
-                    <DropZone onDrop={handleDrop} />
-                    {droppedItems.map((item, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                border: '1px solid #ccc',
-                                padding: '10px',
-                                borderRadius: '5px',
-                                marginTop: '10px',
-                                backgroundColor: 'lightblue',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}>
-                            <p>{item.name}</p>
-
-                        </div>
-                    ))} */}
-                {/* </div> */}
             </div>
         </DndProvider>
     );
