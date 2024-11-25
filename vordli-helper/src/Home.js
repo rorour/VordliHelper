@@ -3,6 +3,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DragItem from './DragItem';
 import DropZone from './DropZone';
+import Modal from './Modal'
+import OrderedDropZone from './OrderedDropZone';
 
 const Home = () => {
     return ( 
@@ -17,11 +19,14 @@ const QueryBuilder = () => {
     const [availableAlphabet, setAvailableAlphabet] = useState(fullAlphabet);
     const [yellowLetters, setYellowLetters] = useState([]);
     const [grayLetters, setGrayLetters] = useState([]);
+    const [numLettersInSolution, setnumLettersInSolution] = useState(5);
+    const [greenLetters, setGreenLetters] = useState({});
 
     const letterFields = {
         AVAILABLE_ALPHABET: "availableAlphabet",
         YELLOW_LETTERS: "yellowLetters",
         GRAY_LETTERS: "grayLetters",
+        GREEN_LETTERS: "greenLetters",
     };
 
     const removeOriginLetter = (item) => {
@@ -69,7 +74,7 @@ const QueryBuilder = () => {
                         origin: letterFields.GRAY_LETTERS,
                         outerClass: "GrayLetters",
                         setter: setGrayLetters,
-                        title: "gray letters abc",
+                        title: "gray",
                     };
             case letterFields.YELLOW_LETTERS:
                 return {
@@ -81,7 +86,12 @@ const QueryBuilder = () => {
                     origin: letterFields.YELLOW_LETTERS,
                     outerClass: "YellowLetters",
                     setter: setYellowLetters,
-                    title: "yellow letters abc",
+                    title: "yellow",
+                };
+            case letterFields.GREEN_LETTERS:
+                return {
+                    numLettersInSolution: numLettersInSolution,
+                    originPrefix: letterFields.GREEN_LETTERS
                 };
         }
 
@@ -90,15 +100,20 @@ const QueryBuilder = () => {
     return (
         <DndProvider backend={HTML5Backend}>
             <div className="QueryBuilder">  
+                <div className="NumLettersPicker">
+                    Characters in Solution: { numLettersInSolution }
+                </div>
                 <div className="MovedLetters">
                     <div>
                         green letters here
+                        <OrderedDropZone props={ getLetterZoneProps(letterFields.GREEN_LETTERS) } />
                     </div>
                     <div>
                         <DropZone props={ getLetterZoneProps(letterFields.YELLOW_LETTERS) } />
                         <DropZone props={ getLetterZoneProps(letterFields.GRAY_LETTERS) } />
                     </div>
-                </div>      
+                </div>
+                <button onClick={()=>{}}>Go</button>
      
                 <DropZone props={ getLetterZoneProps(letterFields.AVAILABLE_ALPHABET) } />
             </div>
