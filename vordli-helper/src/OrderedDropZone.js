@@ -3,17 +3,17 @@ import { useDrop } from 'react-dnd';
 import DragItem from './DragItem';
 
 const OrderedDropZone = ({ props }) => {
-
     const SingleLetterProps = (index) => {
         return {
-            onDrop: (item) => {console.log("dropped item", item, "at index", index)},
-            index: index,
-            value: " a" + index + "z",
+            onDrop: (item) => props.onDrop(item, index),
+            value: props.getter[index],
             origin: props.originPrefix + index,
+            innerClass: props.innerClass,
         }
     }
+
     return ( 
-        <div>
+        <div className="OrderedDropZone">
             {Array(props.numLettersInSolution).fill(null).map((_, index) => (
                 <div key={index}>
                     <SingleLetterDropZone props={ SingleLetterProps(index) } />
@@ -32,15 +32,15 @@ const SingleLetterDropZone = ( { props }) => {
         }),
     }));
 
-    return (
-        <div className="GreenLetter">
-            <div className={ "DropArea " + (isOver && "DropAreaIsOver") } ref={drop}>
-                Drop item {props.index} here 
-                <DragItem value={props.value} key={props.value} origin={props.origin}/>
-            </div>
+    return (  
+        <div className={ "DropArea " + (isOver && "DropAreaIsOver") } ref={drop}>
+            {
+                props.value &&
+                <div className={ "Letter " + props.innerClass }>
+                    <DragItem value={props.value} key={props.value} origin={props.origin}/>
+                </div>
+            }
         </div>
-
-
     );
 };
 

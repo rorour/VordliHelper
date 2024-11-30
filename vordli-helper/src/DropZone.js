@@ -13,13 +13,12 @@ const DropZone = ({ props }) => {
 
     return (
         <div className={ props.outerClass }>
-            
             <div className={ "DropArea " + (isOver && "DropAreaIsOver") } ref={drop}>
                 { props.title && <h3>{ props.title }</h3>}
                 { props.getter.map((value) => (
                     <div key={value}>
                         <div className={ "Letter " + props.innerClass }>
-                        <DragItem value={value} key={value} origin={ props.origin} />
+                            <DragItem value={value} key={value} origin={ props.origin} />
                         </div>
                         {/* { props.allowDelete && <button onClick={() => props.handleRemoveItem(value, props.setter)}> X </button> } */}
                     </div>

@@ -44,6 +44,10 @@
   border: 5px solid red;
 }
 
+.OrderedDropZone {
+  display: flex;
+}
+
 .MovedLetters {
   display: flex;
   align-items: center;

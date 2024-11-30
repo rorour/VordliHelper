@@ -29,6 +29,18 @@ const QueryBuilder = () => {
         GREEN_LETTERS: "greenLetters",
     };
 
+    const setGreenLetter = (index, value) => {
+        setGreenLetters(prevItems => {
+            prevItems[index] = value;
+            return prevItems;
+        })
+    };
+
+    const handleGreenDrop = (item, index) => {
+        removeOriginLetter(item);
+        setGreenLetter(index, item.value);
+    };
+
     const removeOriginLetter = (item) => {
         getLetterZoneProps(item.origin).setter(prevItems => {
             let updatedItems = [...prevItems]
@@ -90,8 +102,11 @@ const QueryBuilder = () => {
                 };
             case letterFields.GREEN_LETTERS:
                 return {
+                    innerClass: "GreenLetter",
                     numLettersInSolution: numLettersInSolution,
-                    originPrefix: letterFields.GREEN_LETTERS
+                    originPrefix: letterFields.GREEN_LETTERS,
+                    onDrop: handleGreenDrop,
+                    getter: greenLetters,
                 };
         }
 
@@ -105,7 +120,6 @@ const QueryBuilder = () => {
                 </div>
                 <div className="MovedLetters">
                     <div>
-                        green letters here
                         <OrderedDropZone props={ getLetterZoneProps(letterFields.GREEN_LETTERS) } />
                     </div>
                     <div>
