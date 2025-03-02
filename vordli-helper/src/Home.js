@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import DragItem from './DragItem';
-import DropZone from './DropZone';
 import Modal from './Modal'
-import OrderedDropZone from './OrderedDropZone';
+import EditableInput from './EditableInput';
 
 const Home = () => {
     return ( 
@@ -17,10 +13,14 @@ const Home = () => {
 const QueryBuilder = () => {
     const fullAlphabet = ["a", "b", "c", "d", "e"]
     const [availableAlphabet, setAvailableAlphabet] = useState(fullAlphabet);
-    const [yellowLetters, setYellowLetters] = useState([]);
-    const [grayLetters, setGrayLetters] = useState([]);
+    const [yellowLetters, setYellowLetters] = useState([]); // dict position: list of str
+    const [grayLetters, setGrayLetters] = useState([]); // list of strings
     const [numLettersInSolution, setnumLettersInSolution] = useState(5);
-    const [greenLetters, setGreenLetters] = useState({});
+    const [greenLetters, setGreenLetters] = useState({}); // dict position: str value
+
+    useEffect(() => {
+        console.log(greenLetters);
+    }, [greenLetters]);
 
     const letterFields = {
         AVAILABLE_ALPHABET: "availableAlphabet",
@@ -29,48 +29,13 @@ const QueryBuilder = () => {
         GREEN_LETTERS: "greenLetters",
     };
 
-    const setGreenLetter = (index, value) => {
-        setGreenLetters(prevItems => {
-            prevItems[index] = value;
-            return prevItems;
-        })
-    };
-
-    const handleGreenDrop = (item, index) => {
-        removeOriginLetter(item);
-        setGreenLetter(index, item.value);
-    };
-
-    const removeOriginLetter = (item) => {
-        getLetterZoneProps(item.origin).setter(prevItems => {
-            let updatedItems = [...prevItems]
-            updatedItems.splice(updatedItems.indexOf(item.value), 1);
-            return updatedItems;
-        });
-    };
-
-    const handleDrop = (item, setter) => {
-        removeOriginLetter(item);
-        setter((prevItems) => [...prevItems, item.value]);
-    };
-
-    const handleRemoveItem = (value, setter) => {
-        setter(prevItems => {
-            let updatedItems = [...prevItems]
-            updatedItems.splice(updatedItems.indexOf(value), 1);
-            return updatedItems;
-        });
-    };
-
-    const getLetterZoneProps = (origin) => {
-        switch (origin) {
+    const getLetterZoneProps = (zone, index) => {
+        switch (zone) {
             case letterFields.AVAILABLE_ALPHABET:
                 return {
                     allowDelete: false,
                     getter: availableAlphabet,
-                    handleRemoveItem: handleRemoveItem,
                     innerClass: "AlphabetLetter",
-                    onDrop: (item) => handleDrop(item, setAvailableAlphabet),
                     origin: letterFields.AVAILABLE_ALPHABET,
                     outerClass: "AvailableAlphabet",
                     setter: setAvailableAlphabet,
@@ -80,9 +45,7 @@ const QueryBuilder = () => {
                     return {
                         allowDelete: true,
                         getter: grayLetters,
-                        handleRemoveItem: handleRemoveItem,
                         innerClass: "GrayLetter",
-                        onDrop: (item) => handleDrop(item, setGrayLetters),
                         origin: letterFields.GRAY_LETTERS,
                         outerClass: "GrayLetters",
                         setter: setGrayLetters,
@@ -92,9 +55,7 @@ const QueryBuilder = () => {
                 return {
                     allowDelete: true,
                     getter: yellowLetters,
-                    handleRemoveItem: handleRemoveItem,
                     innerClass: "YellowLetter",
-                    onDrop: (item) => handleDrop(item, setYellowLetters),
                     origin: letterFields.YELLOW_LETTERS,
                     outerClass: "YellowLetters",
                     setter: setYellowLetters,
@@ -103,33 +64,55 @@ const QueryBuilder = () => {
             case letterFields.GREEN_LETTERS:
                 return {
                     innerClass: "GreenLetter",
-                    numLettersInSolution: numLettersInSolution,
-                    originPrefix: letterFields.GREEN_LETTERS,
-                    onDrop: handleGreenDrop,
+                    // numLettersInSolution: numLettersInSolution,
+                    // originPrefix: letterFields.GREEN_LETTERS,
                     getter: greenLetters,
+                    setter: setGreenLetter,
+                    index: index,
                 };
         }
 
     };
 
+    const setGreenLetter = (index, value) => {
+        console.log('called')
+        setGreenLetters(prevItems => {
+            const newItems = {...prevItems};
+            newItems[index] = value;
+            return newItems;
+        });
+    };
+
+    const myProps = (index) => {
+        return {
+            myattr: "somevalue",
+            index: index,
+        }
+    }
+
     return (
-        <DndProvider backend={HTML5Backend}>
-            <div className="QueryBuilder">  
-                <div className="NumLettersPicker">
-                    Characters in Solution: { numLettersInSolution }
-                </div>
-                <div className="MovedLetters">
-                    <div>
-                        <OrderedDropZone props={ getLetterZoneProps(letterFields.GREEN_LETTERS) } />
-                        <DropZone props={ getLetterZoneProps(letterFields.YELLOW_LETTERS) } />
-                        <DropZone props={ getLetterZoneProps(letterFields.GRAY_LETTERS) } />
-                    </div>
-                </div>
-                <button onClick={SubmitQuery}>Go</button>
-     
-                <DropZone props={ getLetterZoneProps(letterFields.AVAILABLE_ALPHABET) } />
+        <div className="QueryBuilder">  
+            <div className="NumLettersPicker">
+                Characters in Solution: { numLettersInSolution }
             </div>
-        </DndProvider>
+            <div className="GreenLetters">
+                green letters
+                {Array(numLettersInSolution).fill(null).map((_, index) => (
+                    <EditableInput 
+                        key={index} 
+                        props={getLetterZoneProps(letterFields.GREEN_LETTERS, index)}
+                    ></EditableInput>
+                ))}
+            </div>
+            <div className="YellowLetters">
+                {/* <EditableInput props={myProps}></EditableInput> */}
+                yellow letters
+            </div>
+            <div className="GrayLetters">
+                gray letters
+            </div>
+            <button onClick={SubmitQuery}>Go</button>
+        </div>
     );
 }
 
