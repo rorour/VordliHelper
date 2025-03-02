@@ -1,4 +1,6 @@
 import { Link, Outlet } from 'react-router-dom'
+import github_logo from './img/github_logo.png'
+import vordli_logo from './img/vordli_logo.png'
 
 const Layout = () => {
     return ( 
@@ -13,9 +15,11 @@ const Layout = () => {
 const Header = () => {
     return ( 
         <div>
-            <div>header</div>
-            <Link to='/'>link to home </Link>
-            <Link to='/bbb'>invalid link</Link>
+            <div>
+                <Link to='/'>
+                    <img style={{height:"80px"}} src={vordli_logo} alt="ВордлиHelper" />
+                </Link>
+            </div>
         </div>
      );
 }
@@ -23,7 +27,9 @@ const Header = () => {
 const Footer = () => {
     return ( 
         <div>
-            <div>footer</div>
+            <Link to='https://github.com/rorour/VordliHelper/'>
+                <img style={{height:"30px"}} src={github_logo} alt="GitHub" />
+            </Link>
         </div>
      );
 }

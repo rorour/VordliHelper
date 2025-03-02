@@ -121,18 +121,24 @@ const QueryBuilder = () => {
                 <div className="MovedLetters">
                     <div>
                         <OrderedDropZone props={ getLetterZoneProps(letterFields.GREEN_LETTERS) } />
-                    </div>
-                    <div>
                         <DropZone props={ getLetterZoneProps(letterFields.YELLOW_LETTERS) } />
                         <DropZone props={ getLetterZoneProps(letterFields.GRAY_LETTERS) } />
                     </div>
                 </div>
-                <button onClick={()=>{}}>Go</button>
+                <button onClick={SubmitQuery}>Go</button>
      
                 <DropZone props={ getLetterZoneProps(letterFields.AVAILABLE_ALPHABET) } />
             </div>
         </DndProvider>
     );
+}
+
+const SubmitQuery = () => {
+    fetch('https://852i63sqe6.execute-api.us-east-1.amazonaws.com/simpleDbFetch')
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .catch(error => console.error(error));
+    console.log('hihi');
 }
 
 const Solutions = () => {

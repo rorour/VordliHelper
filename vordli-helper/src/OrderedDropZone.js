@@ -33,7 +33,7 @@ const SingleLetterDropZone = ( { props }) => {
     }));
 
     return (  
-        <div className={ "DropArea " + (isOver && "DropAreaIsOver") } ref={drop}>
+        <div className={ "DropArea GreenLetters " + (isOver && "DropAreaIsOver") } ref={drop}>
             {
                 props.value &&
                 <div className={ "Letter " + props.innerClass }>

@@ -14,7 +14,7 @@ const DropZone = ({ props }) => {
     return (
         <div className={ props.outerClass }>
             <div className={ "DropArea " + (isOver && "DropAreaIsOver") } ref={drop}>
-                { props.title && <h3>{ props.title }</h3>}
+                <div className="DropAreaTitle">{props.title}</div>
                 { props.getter.map((value) => (
                     <div key={value}>
                         <div className={ "Letter " + props.innerClass }>
