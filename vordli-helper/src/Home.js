@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from './Modal'
-import { GreenLetterInput, GrayLetterInput, YellowLetterDisplay } from './LetterInput';
+import { GreenLetterInput, GrayLetterInput, LetterStack } from './LetterInput';
 
 const Home = () => {
     return ( 
@@ -46,6 +46,8 @@ const QueryBuilder = () => {
                 };
             case letterFields.YELLOW_LETTERS:
                 return {
+                    setter: setYellowLetter,
+                    index: index,
                     // allowDelete: true,
                     // getter: yellowLetters,
                     // innerClass: "YellowLetter",
@@ -62,6 +64,14 @@ const QueryBuilder = () => {
         setGreenLetters(prevItems => {
             const newItems = {...prevItems};
             newItems[index] = value;
+            return newItems;
+        });
+    };
+
+    const setYellowLetter = (index, value) => {
+        setYellowLetters(prevItems => {
+            const newItems = {...prevItems};
+            newItems[index] = [...(newItems[index] ?? []), value];
             return newItems;
         });
     };
@@ -85,7 +95,7 @@ const QueryBuilder = () => {
             </div>
             <div className="YellowLetters">
                 {Array(numLettersInSolution).fill(null).map((_, index) => (
-                    <LetterStack props={{arr: yellowLetters[index]}}></LetterStack>
+                    <LetterStack props={{arr: yellowLetters[index], ...getLetterZoneProps(letterFields.YELLOW_LETTERS, index)}}></LetterStack>
                 ))
                 }
             </div>
@@ -93,18 +103,6 @@ const QueryBuilder = () => {
                 <GrayLetterInput props={getLetterZoneProps(letterFields.GRAY_LETTERS)}></GrayLetterInput>
             </div>
             <button onClick={SubmitQuery}>Go</button>
-        </div>
-    );
-}
-
-const LetterStack = ({props}) => {
-    return (
-        <div className="LetterStack">
-            {
-                (Array.isArray(props.arr) ? props.arr : []).map((value, i) => (
-                    <YellowLetterDisplay key={i} props={{value: value}}></YellowLetterDisplay>
-                ))
-            }
         </div>
     );
 }

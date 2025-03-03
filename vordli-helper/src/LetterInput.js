@@ -31,6 +31,40 @@ export const GreenLetterInput = ({props}) => {
   );
 };
 
+export const YellowLetterInput = ({props}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [text, setText] = useState("");
+
+  return (
+    <div className="YellowLetterInput">
+        {isEditing ? (
+            <input
+            type="text"
+            value={text}
+            autoFocus
+            onChange={(e) => setText(e.target.value)}
+            onBlur={() => {
+                setIsEditing(false);
+                props.setter(props.index, text);
+            }}
+            className="EditingYellowLetter"
+            maxLength="1"
+            />
+        ) : (
+            <div
+            onClick={() => {
+              setIsEditing(true);
+              setText("");
+            }}
+            className="NotEditingYellowLetter"
+            >
+            +
+            </div>
+        )}
+    </div>
+  );
+};
+
 export const GrayLetterInput = ({props}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(props.getter[props.index] ?? '');
@@ -61,6 +95,19 @@ export const GrayLetterInput = ({props}) => {
     </div>
   );
 };
+
+export const LetterStack = ({props}) => {
+  return (
+      <div className="LetterStack">
+          <YellowLetterInput props={props}></YellowLetterInput>
+          {
+              (Array.isArray(props.arr) ? props.arr : []).map((value, i) => (
+                  <YellowLetterDisplay key={i} props={{value: value}}></YellowLetterDisplay>
+              ))
+          }
+      </div>
+  );
+}
 
 export const YellowLetterDisplay = ({props}) => {
   return (
