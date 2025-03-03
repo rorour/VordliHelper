@@ -1,5 +1,6 @@
 body {
-  background-color: #454545;
+  background-color: black;
+  color: #FFFEFC;
 }
 
 .App {
@@ -17,14 +18,25 @@ yellow #FEC64D
 green #28cc50
 */
 
-.EditableInput {
+.LetterInput {
   background-color: red;
   display: flex;
   justify-content: center;
   align-items: center;   
-  width: 100px;
-  height: 100px;
   margin: 10px;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+.YellowLetters {
+  background-color: yellow;
+  display: flex;
+  justify-content: center;
+}
+
+.LetterStack {
+  border: 5px solid blue;
 }
 
 .GreenLetters {
@@ -34,6 +46,11 @@ green #28cc50
 
 .GreenLetter {
   background-color: #28cc50;
+  color: #FFFEFC;
+  width: 100px;
+  height: 100px;
+  font-size: 60px;
+  border-radius: 5px;
 }
 
 .EditingGreenLetter {
@@ -43,6 +60,10 @@ green #28cc50
   width: 100%;
   height: 100%;
   background-color: #28cc50;
+  color: #FFFEFC;
+  font-size: 60px;
+  border-radius: 5px;
+  text-align: center;
 }
 
 .NotEditingGreenLetter {
@@ -52,6 +73,43 @@ green #28cc50
   width: 100%;
   height: 100%;
   background-color: #28cc50;
+  border-radius: 5px;
+}
+
+.GrayLetters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #707070;
+  color: #FFFEFC;
+  font-size: 60px;
+  border-radius: 5px;
+  width: 50%;
+  height: 100px;
+  margin: auto;
+}
+
+.EditingGrayLetters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #707070;
+  color: #FFFEFC;
+  font-size: 60px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.NotEditingGrayLetters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #707070;
+  border-radius: 5px;
 }
 
 .QueryBuilder {

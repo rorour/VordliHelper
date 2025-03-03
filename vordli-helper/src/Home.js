@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from './Modal'
-import EditableInput from './EditableInput';
+import { GreenLetterInput, GrayLetterInput, YellowLetterDisplay } from './LetterInput';
 
 const Home = () => {
     return ( 
@@ -13,14 +13,15 @@ const Home = () => {
 const QueryBuilder = () => {
     const fullAlphabet = ["a", "b", "c", "d", "e"]
     const [availableAlphabet, setAvailableAlphabet] = useState(fullAlphabet);
-    const [yellowLetters, setYellowLetters] = useState([]); // dict position: list of str
+    const yellowTest = {0: ["a", "b"], 2: ["c"], 3: ["d", "e", "f", "g"], 4: ["h"]}
+    const [yellowLetters, setYellowLetters] = useState(yellowTest); // dict position: list of str
     const [grayLetters, setGrayLetters] = useState([]); // list of strings
     const [numLettersInSolution, setnumLettersInSolution] = useState(5);
     const [greenLetters, setGreenLetters] = useState({}); // dict position: str value
 
     useEffect(() => {
-        console.log(greenLetters);
-    }, [greenLetters]);
+        console.log(grayLetters);
+    }, [grayLetters]);
 
     const letterFields = {
         AVAILABLE_ALPHABET: "availableAlphabet",
@@ -31,51 +32,33 @@ const QueryBuilder = () => {
 
     const getLetterZoneProps = (zone, index) => {
         switch (zone) {
-            case letterFields.AVAILABLE_ALPHABET:
+            case letterFields.GRAY_LETTERS:
                 return {
-                    allowDelete: false,
-                    getter: availableAlphabet,
-                    innerClass: "AlphabetLetter",
-                    origin: letterFields.AVAILABLE_ALPHABET,
-                    outerClass: "AvailableAlphabet",
-                    setter: setAvailableAlphabet,
-                    title: false,
-                };
-                case letterFields.GRAY_LETTERS:
-                    return {
-                        allowDelete: true,
-                        getter: grayLetters,
-                        innerClass: "GrayLetter",
-                        origin: letterFields.GRAY_LETTERS,
-                        outerClass: "GrayLetters",
-                        setter: setGrayLetters,
-                        title: "gray",
-                    };
-            case letterFields.YELLOW_LETTERS:
-                return {
-                    allowDelete: true,
-                    getter: yellowLetters,
-                    innerClass: "YellowLetter",
-                    origin: letterFields.YELLOW_LETTERS,
-                    outerClass: "YellowLetters",
-                    setter: setYellowLetters,
-                    title: "yellow",
+                    getter: grayLetters,
+                    setter: updateGrayLetters,
                 };
             case letterFields.GREEN_LETTERS:
                 return {
                     innerClass: "GreenLetter",
-                    // numLettersInSolution: numLettersInSolution,
-                    // originPrefix: letterFields.GREEN_LETTERS,
                     getter: greenLetters,
                     setter: setGreenLetter,
                     index: index,
                 };
-        }
+            case letterFields.YELLOW_LETTERS:
+                return {
+                    // allowDelete: true,
+                    // getter: yellowLetters,
+                    // innerClass: "YellowLetter",
+                    // origin: letterFields.YELLOW_LETTERS,
+                    // outerClass: "YellowLetters",
+                    // setter: setYellowLetters,
+                    // title: "yellow",
+                };
 
+        }
     };
 
     const setGreenLetter = (index, value) => {
-        console.log('called')
         setGreenLetters(prevItems => {
             const newItems = {...prevItems};
             newItems[index] = value;
@@ -83,12 +66,9 @@ const QueryBuilder = () => {
         });
     };
 
-    const myProps = (index) => {
-        return {
-            myattr: "somevalue",
-            index: index,
-        }
-    }
+    const updateGrayLetters = (values) => {
+        setGrayLetters([...values]);
+    };
 
     return (
         <div className="QueryBuilder">  
@@ -96,22 +76,35 @@ const QueryBuilder = () => {
                 Characters in Solution: { numLettersInSolution }
             </div>
             <div className="GreenLetters">
-                green letters
                 {Array(numLettersInSolution).fill(null).map((_, index) => (
-                    <EditableInput 
+                    <GreenLetterInput 
                         key={index} 
                         props={getLetterZoneProps(letterFields.GREEN_LETTERS, index)}
-                    ></EditableInput>
+                    ></GreenLetterInput>
                 ))}
             </div>
             <div className="YellowLetters">
-                {/* <EditableInput props={myProps}></EditableInput> */}
-                yellow letters
+                {Array(numLettersInSolution).fill(null).map((_, index) => (
+                    <LetterStack props={{arr: yellowLetters[index]}}></LetterStack>
+                ))
+                }
             </div>
             <div className="GrayLetters">
-                gray letters
+                <GrayLetterInput props={getLetterZoneProps(letterFields.GRAY_LETTERS)}></GrayLetterInput>
             </div>
             <button onClick={SubmitQuery}>Go</button>
+        </div>
+    );
+}
+
+const LetterStack = ({props}) => {
+    return (
+        <div className="LetterStack">
+            {
+                (Array.isArray(props.arr) ? props.arr : []).map((value, i) => (
+                    <YellowLetterDisplay key={i} props={{value: value}}></YellowLetterDisplay>
+                ))
+            }
         </div>
     );
 }
