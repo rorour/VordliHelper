@@ -102,7 +102,7 @@ export const LetterStack = ({props}) => {
           <YellowLetterInput props={props}></YellowLetterInput>
           {
               (Array.isArray(props.arr) ? props.arr : []).map((value, i) => (
-                  <YellowLetterDisplay key={i} props={{value: value}}></YellowLetterDisplay>
+                  <YellowLetterDisplay key={value} props={{value: value}}></YellowLetterDisplay>
               ))
           }
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import Modal from './Modal'
 import { GreenLetterInput, GrayLetterInput, LetterStack } from './LetterInput';
+import Modal from './Modal'
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const Home = () => {
     return ( 
@@ -11,17 +12,13 @@ const Home = () => {
 }
  
 const QueryBuilder = () => {
-    const fullAlphabet = ["a", "b", "c", "d", "e"]
-    const [availableAlphabet, setAvailableAlphabet] = useState(fullAlphabet);
     const yellowTest = {0: ["a", "b"], 2: ["c"], 3: ["d", "e", "f", "g"], 4: ["h"]}
     const [yellowLetters, setYellowLetters] = useState(yellowTest); // dict position: list of str
     const [grayLetters, setGrayLetters] = useState([]); // list of strings
     const [numLettersInSolution, setnumLettersInSolution] = useState(5);
     const [greenLetters, setGreenLetters] = useState({}); // dict position: str value
-
-    useEffect(() => {
-        console.log(grayLetters);
-    }, [grayLetters]);
+    const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+    const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
 
     const letterFields = {
         AVAILABLE_ALPHABET: "availableAlphabet",
@@ -48,13 +45,6 @@ const QueryBuilder = () => {
                 return {
                     setter: setYellowLetter,
                     index: index,
-                    // allowDelete: true,
-                    // getter: yellowLetters,
-                    // innerClass: "YellowLetter",
-                    // origin: letterFields.YELLOW_LETTERS,
-                    // outerClass: "YellowLetters",
-                    // setter: setYellowLetters,
-                    // title: "yellow",
                 };
 
         }
@@ -80,10 +70,33 @@ const QueryBuilder = () => {
         setGrayLetters([...values]);
     };
 
+    const handleChange = (event) => {
+        setnumLettersInSolution(event.target.value);
+      };
+
     return (
         <div className="QueryBuilder">  
-            <div className="NumLettersPicker">
-                Characters in Solution: { numLettersInSolution }
+            <div className="NumLettersPicker">                
+                <button className="MainButton" onClick={() => setIsSettingsModalOpen(true)}>
+                    <i className="bi bi-gear-fill"></i>
+                </button>
+                <button className="MainButton" onClick={() => setIsHelpModalOpen(true)}>
+                    <i className="bi bi-patch-question-fill"></i>
+                </button>
+                <Modal isOpen={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)}>
+                    <div>
+                        <label htmlFor="numLettersInSolution">Number of Letters/Сколько Букв:</label>
+                        <select id="numLettersInSolution" value={numLettersInSolution} onChange={handleChange}>
+                            {[3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((v) => (
+                            <option key={v} value={v}>{v}</option>
+                            ))}
+                        </select>
+                    </div>
+                </Modal>
+                <Modal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)}>
+                    <div>my help contents</div>
+                    <button onClick={() => setIsHelpModalOpen(false)}>Close</button>
+                </Modal>
             </div>
             <div className="GreenLetters">
                 {Array(numLettersInSolution).fill(null).map((_, index) => (
@@ -95,7 +108,7 @@ const QueryBuilder = () => {
             </div>
             <div className="YellowLetters">
                 {Array(numLettersInSolution).fill(null).map((_, index) => (
-                    <LetterStack props={{arr: yellowLetters[index], ...getLetterZoneProps(letterFields.YELLOW_LETTERS, index)}}></LetterStack>
+                    <LetterStack key={index} props={{arr: yellowLetters[index], ...getLetterZoneProps(letterFields.YELLOW_LETTERS, index)}}></LetterStack>
                 ))
                 }
             </div>
@@ -106,6 +119,8 @@ const QueryBuilder = () => {
         </div>
     );
 }
+
+
 
 const SubmitQuery = () => {
     fetch('https://852i63sqe6.execute-api.us-east-1.amazonaws.com/simpleDbFetch')

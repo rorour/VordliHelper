@@ -16,6 +16,7 @@ lighter gray #707070
 off white #FFFEFC
 yellow #FEC64D
 green #28cc50
+blue #01a7d9
 */
 
 .LetterInput {
@@ -162,4 +163,58 @@ green #28cc50
 .NumLettersPicker {
   display: flex;
   justify-content: flex-end;
+}
+
+.MainButton {
+  background-color: black;
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-size: 40px;
+  margin: 5px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; 
+}
+
+.modal-content {
+  background: #707070;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  position: relative;
+}
+
+.ModalClose { 
+  background-color: #121212;
+  border: none;
+  color: #707070;
+  cursor: pointer;
+  font-size: 40px;
+  left: 10px;
+  margin: 5px;
+  top: 10px;
+}
+
+.ModalTop {
+  background-color: #121212;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.ModalBody {
+  padding: 20px;
+  color: black;
+  font-family: Helvetica, Arial, sans-serif;
 }
