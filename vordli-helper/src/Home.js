@@ -16,9 +16,11 @@ const QueryBuilder = () => {
     const [grayLetters, setGrayLetters] = useState("");
     const [greenLetters, setGreenLetters] = useState({}); // dict position: str value
     const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+    const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
     const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
     const [numLettersInSolution, setnumLettersInSolution] = useState(5);
     const [yellowLetters, setYellowLetters] = useState({}); // dict position: list of str
+    const [solutions, setSolutions] = useState("");
 
     const letterFields = {
         YELLOW_LETTERS: "yellowLetters",
@@ -45,6 +47,8 @@ const QueryBuilder = () => {
                     setter: setYellowLetter,
                     index: index,
                 };
+            default:
+                return {};
         }
     };
 
@@ -102,8 +106,42 @@ const QueryBuilder = () => {
         const greenNotEmpty = Object.values(greenLetters).some(str => str.trim() !== "");
         const yellowNotEmpty = Object.values(yellowLetters).some(list => Array.isArray(list) && list.length > 0);
         if (grayNotEmpty || greenNotEmpty || yellowNotEmpty) {
-            SubmitQuery({ props: { greenLetters, grayLetters, yellowLetters, numLettersInSolution } });
+            submitQuery();
+            setSolutions("");
+            setIsSolutionModalOpen(true);
         };
+    };
+
+    const submitQuery = () => {
+        try {
+            const payload = {
+                greenLetters: greenLetters,
+                grayLetters: grayLetters,
+                yellowLetters: yellowLetters,
+                numLettersInSolution: numLettersInSolution
+            };
+            fetch('https://dfvly776la.execute-api.us-east-1.amazonaws.com/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(response.status);
+                }
+                return response.json();
+            })
+            .then((json) => {
+                console.log("Response from Lambda:", json)
+                setSolutions(JSON.stringify(json));
+            })
+            .catch(error => console.error("Error:", error));
+    
+        } catch (error) {
+            console.error("Serialization error:", error);
+        }
     };
 
     return (
@@ -128,6 +166,25 @@ const QueryBuilder = () => {
                 <Modal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)}>
                     <div>my help contents</div>
                     <button onClick={() => setIsHelpModalOpen(false)}>Close</button>
+                </Modal>
+                <Modal isOpen={isSolutionModalOpen} onClose={() => setIsSolutionModalOpen(false)}>
+                    <div className="SolutionScrollbox">
+                    {solutions && solutions !== "" ? (
+                    <table>
+                        <tbody>
+                            {JSON.parse(solutions).map((solution, index) => (
+                                <tr key={index}>
+                                    <td><b>{solution.word}</b></td>
+                                    <td>{solution.translation}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    ) : (
+                        <p>...</p>
+                    )}
+                    </div>
+                    <button onClick={() => setIsSolutionModalOpen(false)}>Close</button>
                 </Modal>
             </div>
             <div className="GreenLetters">
@@ -154,42 +211,4 @@ const QueryBuilder = () => {
     );
 }
 
-
-
-const SubmitQuery = ({ props }) => {
-    try {
-        const payload = {
-            greenLetters: props.greenLetters,
-            grayLetters: props.grayLetters,
-            yellowLetters: props.yellowLetters,
-            numLettersInSolution: props.numLettersInSolution
-        };
-        fetch('https://dfvly776la.execute-api.us-east-1.amazonaws.com/search', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(response.status);
-            }
-            return response.json();
-        })
-        .then(json => console.log("Response from Lambda:", json))
-        .catch(error => console.error("Error:", error));
-
-    } catch (error) {
-        console.error("Serialization error:", error);
-    }
-};
-
-
-const Solutions = () => {
-    return ( 
-        <div>Solutions here</div>
-     );
-} 
- 
 export default Home;
