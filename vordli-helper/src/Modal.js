@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useEffect } from "react";
 
 const Modal = ({ isOpen, onClose, children }) => {
   useEffect(() => {
@@ -13,8 +13,8 @@ const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="ModalOverlay" onClick={onClose}>
+      <div className="ModalContent" onClick={(e) => e.stopPropagation()}>
         <div className="ModalTop">
           <button className="ModalClose" onClick={onClose}>
             <i className="bi bi-x-circle-fill"></i>

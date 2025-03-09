@@ -4,7 +4,6 @@ import Home from './Home'
 import Layout from './Layout'
 import NotFound from './NotFound';
 
-
 const App = () => {
   return (
     <BrowserRouter

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { GreenLetterInput, GrayLetterInput, LetterStack } from './LetterInput';
-import Modal from './Modal'
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { GreenLetterInput, GrayLetterInput, LetterStack } from './LetterInput';
+import { useEffect, useState } from 'react';
+import Modal from './Modal'
 
 const Home = () => {
     return ( 
@@ -12,16 +12,15 @@ const Home = () => {
 }
  
 const QueryBuilder = () => {
-    const yellowTest = {0: ["a", "b"], 2: ["c"], 3: ["d", "e", "f", "g"], 4: ["h"]}
-    const [yellowLetters, setYellowLetters] = useState(yellowTest); // dict position: list of str
+    const ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     const [grayLetters, setGrayLetters] = useState([]); // list of strings
-    const [numLettersInSolution, setnumLettersInSolution] = useState(5);
     const [greenLetters, setGreenLetters] = useState({}); // dict position: str value
-    const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
     const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+    const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+    const [numLettersInSolution, setnumLettersInSolution] = useState(5);
+    const [yellowLetters, setYellowLetters] = useState({}); // dict position: list of str
 
     const letterFields = {
-        AVAILABLE_ALPHABET: "availableAlphabet",
         YELLOW_LETTERS: "yellowLetters",
         GRAY_LETTERS: "grayLetters",
         GREEN_LETTERS: "greenLetters",
@@ -46,11 +45,18 @@ const QueryBuilder = () => {
                     setter: setYellowLetter,
                     index: index,
                 };
-
         }
     };
 
+    const isValidLetter = (letter) => {
+        return ALPHABET.includes(letter);
+    };
+
     const setGreenLetter = (index, value) => {
+        value = value.toUpperCase()
+        if (! isValidLetter(value)) {
+            return;
+        }
         setGreenLetters(prevItems => {
             const newItems = {...prevItems};
             newItems[index] = value;
@@ -59,7 +65,14 @@ const QueryBuilder = () => {
     };
 
     const setYellowLetter = (index, value) => {
+        value = value.toUpperCase()
+        if (! isValidLetter(value)) {
+            return;
+        }
         setYellowLetters(prevItems => {
+            if (prevItems[index] && prevItems[index].includes(value)) {
+                return prevItems;
+            }
             const newItems = {...prevItems};
             newItems[index] = [...(newItems[index] ?? []), value];
             return newItems;
@@ -67,12 +80,27 @@ const QueryBuilder = () => {
     };
 
     const updateGrayLetters = (values) => {
-        setGrayLetters([...values]);
+        console.log('values', values);
+        const newItems = [
+            ...new Set((values ?? "").split('').map(value => value.toUpperCase()))
+        ].filter(value => ALPHABET.includes(value)).join("");
+        setGrayLetters(newItems);
     };
 
-    const handleChange = (event) => {
-        setnumLettersInSolution(event.target.value);
-      };
+    useEffect(() => {
+        console.log("gray letters now", grayLetters)
+    }, [grayLetters]);
+
+    const handleChangeNumLetters = (event) => {
+        setnumLettersInSolution(Number(event.target.value));
+    };
+
+    useEffect(() => {
+        // rerender LetterInputs when numLettersInSolution updates
+        setGreenLetters(Object.fromEntries([...Array(numLettersInSolution).keys()].map(i => [i, ""])));
+        setYellowLetters(Object.fromEntries([...Array(numLettersInSolution).keys()].map(i => [i, []])));
+    }, [numLettersInSolution]);
+    
 
     return (
         <div className="QueryBuilder">  
@@ -86,8 +114,8 @@ const QueryBuilder = () => {
                 <Modal isOpen={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)}>
                     <div>
                         <label htmlFor="numLettersInSolution">Number of Letters/Сколько Букв:</label>
-                        <select id="numLettersInSolution" value={numLettersInSolution} onChange={handleChange}>
-                            {[3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((v) => (
+                        <select id="numLettersInSolution" value={numLettersInSolution} onChange={handleChangeNumLetters}>
+                            {[3, 4, 5, 6, 7, 8, 9, 10, 11].map((v) => (
                             <option key={v} value={v}>{v}</option>
                             ))}
                         </select>
@@ -99,18 +127,20 @@ const QueryBuilder = () => {
                 </Modal>
             </div>
             <div className="GreenLetters">
-                {Array(numLettersInSolution).fill(null).map((_, index) => (
+                {Object.keys(greenLetters).map((index) => (
                     <GreenLetterInput 
                         key={index} 
-                        props={getLetterZoneProps(letterFields.GREEN_LETTERS, index)}
-                    ></GreenLetterInput>
+                        props={getLetterZoneProps(letterFields.GREEN_LETTERS, Number(index))}
+                    />
                 ))}
             </div>
             <div className="YellowLetters">
-                {Array(numLettersInSolution).fill(null).map((_, index) => (
-                    <LetterStack key={index} props={{arr: yellowLetters[index], ...getLetterZoneProps(letterFields.YELLOW_LETTERS, index)}}></LetterStack>
-                ))
-                }
+                {Object.keys(yellowLetters).map((index) => (
+                    <LetterStack 
+                        key={index} 
+                        props={{ arr: yellowLetters[index], ...getLetterZoneProps(letterFields.YELLOW_LETTERS, Number(index)) }}
+                    />
+                ))}
             </div>
             <div className="GrayLetters">
                 <GrayLetterInput props={getLetterZoneProps(letterFields.GRAY_LETTERS)}></GrayLetterInput>
@@ -120,14 +150,11 @@ const QueryBuilder = () => {
     );
 }
 
-
-
 const SubmitQuery = () => {
     fetch('https://852i63sqe6.execute-api.us-east-1.amazonaws.com/simpleDbFetch')
         .then(response => response.json())
         .then(json => console.log(json))
         .catch(error => console.error(error));
-    console.log('hihi');
 }
 
 const Solutions = () => {
