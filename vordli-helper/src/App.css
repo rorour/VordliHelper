@@ -44,6 +44,16 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 60px;
+  position: relative;
+}
+
+.YellowLetterDelete {
+  color: black;
+  font-size: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 5px;
 }
 
 .YellowLetterInput {

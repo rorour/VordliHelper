@@ -12,15 +12,15 @@ const Home = () => {
 }
  
 const QueryBuilder = () => {
-    const ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     const [grayLetters, setGrayLetters] = useState("");
     const [greenLetters, setGreenLetters] = useState({}); // dict position: str value
     const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-    const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
     const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+    const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
     const [numLettersInSolution, setnumLettersInSolution] = useState(5);
-    const [yellowLetters, setYellowLetters] = useState({}); // dict position: list of str
     const [solutions, setSolutions] = useState("");
+    const [yellowLetters, setYellowLetters] = useState({}); // dict position: list of str
+    const ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
 
     const letterFields = {
         YELLOW_LETTERS: "yellowLetters",
@@ -45,6 +45,7 @@ const QueryBuilder = () => {
             case letterFields.YELLOW_LETTERS:
                 return {
                     setter: setYellowLetter,
+                    delete: deleteYellowLetter,
                     index: index,
                 };
             default:
@@ -53,7 +54,7 @@ const QueryBuilder = () => {
     };
 
     const isValidLetter = (letter) => {
-        return ALPHABET.includes(letter);
+        return letter !== "" && ALPHABET.includes(letter);
     };
 
     const setGreenLetter = (index, value) => {
@@ -81,6 +82,28 @@ const QueryBuilder = () => {
             newItems[index] = [...(newItems[index] ?? []), value];
             return newItems;
         });
+    };
+
+    const deleteYellowLetter = (index, value) => {
+        console.log('called 2')
+
+        setYellowLetters(prevItems => {
+            console.log(prevItems, prevItems[index])
+            if (!Array.isArray(prevItems[index])) {
+                return prevItems;
+            }
+
+            console.log('removing value', value, ' from index ', index)
+            const newItems = {...prevItems};
+            const newStackItems = [...newItems[index]];
+            const i = newStackItems.indexOf(value);
+            if (i !== -1) {
+                newStackItems.splice(i, 1);
+            }
+            newItems[index] = newStackItems;
+            return newItems;
+        });
+        
     };
 
     const updateGrayLetters = (values) => {

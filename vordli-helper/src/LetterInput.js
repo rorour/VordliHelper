@@ -126,8 +126,8 @@ export const LetterStack = ({props}) => {
       <div className="LetterStack">
           <YellowLetterInput props={props}></YellowLetterInput>
           {
-              (Array.isArray(props.arr) ? props.arr : []).map((value) => (
-                  <YellowLetterDisplay key={value} props={{value: value}}></YellowLetterDisplay>
+              (Array.isArray(props.arr) ? props.arr : []).map((value, i) => (
+                  <YellowLetterDisplay key={value} props={{value: value, ...props}}></YellowLetterDisplay>
               ))
           }
       </div>
@@ -135,7 +135,15 @@ export const LetterStack = ({props}) => {
 }
 
 export const YellowLetterDisplay = ({props}) => {
+  const handleDelete = () => {
+    console.log('called 1')
+    props.delete(props.index, props.value)
+  };
+
   return (
-    <div className="YellowLetter">{props.value}</div>
+    <div className="YellowLetter">
+      <div className="YellowLetterDelete" onClick={handleDelete}><i className="bi bi-x-circle"></i></div>
+      {props.value}
+    </div>
   );
 };
