@@ -17,7 +17,7 @@ const Header = () => {
         <div>
             <div>
                 <Link to='/'>
-                    <img style={{height:"80px"}} src={vordli_logo} alt="ВордлиHelper" />
+                    <img className="VordliLogo" src={vordli_logo} alt="ВордлиHelper" />
                 </Link>
             </div>
         </div>
