@@ -83,9 +83,7 @@ export const GrayLetterInput = ({props}) => {
   const [text, setText] = useState(props.getter[props.index] ?? '');
 
   useEffect(() => {
-    console.log("called use effect");
     if (!isEditing) {
-      console.log("setting text");
       setText(props.getter ?? '');
     }
   }, [props.getter, isEditing]);

@@ -13,7 +13,7 @@ const Home = () => {
  
 const QueryBuilder = () => {
     const ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
-    const [grayLetters, setGrayLetters] = useState([]); // list of strings
+    const [grayLetters, setGrayLetters] = useState("");
     const [greenLetters, setGreenLetters] = useState({}); // dict position: str value
     const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
     const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -80,16 +80,11 @@ const QueryBuilder = () => {
     };
 
     const updateGrayLetters = (values) => {
-        console.log('values', values);
         const newItems = [
             ...new Set((values ?? "").split('').map(value => value.toUpperCase()))
         ].filter(value => ALPHABET.includes(value)).join("");
         setGrayLetters(newItems);
     };
-
-    useEffect(() => {
-        console.log("gray letters now", grayLetters)
-    }, [grayLetters]);
 
     const handleChangeNumLetters = (event) => {
         setnumLettersInSolution(Number(event.target.value));
@@ -101,6 +96,15 @@ const QueryBuilder = () => {
         setYellowLetters(Object.fromEntries([...Array(numLettersInSolution).keys()].map(i => [i, []])));
     }, [numLettersInSolution]);
     
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const grayNotEmpty = grayLetters.trim() !== "";
+        const greenNotEmpty = Object.values(greenLetters).some(str => str.trim() !== "");
+        const yellowNotEmpty = Object.values(yellowLetters).some(list => Array.isArray(list) && list.length > 0);
+        if (grayNotEmpty || greenNotEmpty || yellowNotEmpty) {
+            SubmitQuery({ props: { greenLetters, grayLetters, yellowLetters, numLettersInSolution } });
+        };
+    };
 
     return (
         <div className="QueryBuilder">  
@@ -145,17 +149,42 @@ const QueryBuilder = () => {
             <div className="GrayLetters">
                 <GrayLetterInput props={getLetterZoneProps(letterFields.GRAY_LETTERS)}></GrayLetterInput>
             </div>
-            <button onClick={SubmitQuery}>Go</button>
+            <button onClick={handleSubmit}>Search</button> 
         </div>
     );
 }
 
-const SubmitQuery = () => {
-    fetch('https://852i63sqe6.execute-api.us-east-1.amazonaws.com/simpleDbFetch')
-        .then(response => response.json())
-        .then(json => console.log(json))
-        .catch(error => console.error(error));
-}
+
+
+const SubmitQuery = ({ props }) => {
+    try {
+        const payload = {
+            greenLetters: props.greenLetters,
+            grayLetters: props.grayLetters,
+            yellowLetters: props.yellowLetters,
+            numLettersInSolution: props.numLettersInSolution
+        };
+        fetch('https://dfvly776la.execute-api.us-east-1.amazonaws.com/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            return response.json();
+        })
+        .then(json => console.log("Response from Lambda:", json))
+        .catch(error => console.error("Error:", error));
+
+    } catch (error) {
+        console.error("Serialization error:", error);
+    }
+};
+
 
 const Solutions = () => {
     return ( 
