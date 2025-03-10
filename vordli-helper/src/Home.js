@@ -1,6 +1,8 @@
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { GreenLetterInput, GrayLetterInput, LetterStack } from './LetterInput';
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react';
+import github_logo from './img/github_logo.png'
 import Modal from './Modal'
 
 const Home = () => {
@@ -188,7 +190,11 @@ const QueryBuilder = () => {
                 </Modal>
                 <Modal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)}>
                     <div>my help contents</div>
-                    <button onClick={() => setIsHelpModalOpen(false)}>Close</button>
+                    <div>
+                        <Link to='https://github.com/rorour/VordliHelper/'>
+                            <img style={{height:"30px"}} src={github_logo} alt="GitHub" />
+                        </Link>
+                    </div>
                 </Modal>
                 <Modal isOpen={isSolutionModalOpen} onClose={() => setIsSolutionModalOpen(false)}>
                     <div className="SolutionScrollbox">
@@ -207,7 +213,6 @@ const QueryBuilder = () => {
                         <p>...</p>
                     )}
                     </div>
-                    <button onClick={() => setIsSolutionModalOpen(false)}>Close</button>
                 </Modal>
             </div>
             <div className="GreenLetters">

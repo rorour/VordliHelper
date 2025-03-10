@@ -34,7 +34,7 @@ body {
 .SearchButton {
 	background-color:#2F2F2F;
 	border-radius:5px;
-  font-size: clamp(10px, 2vw, 50px);
+  font-size: clamp(20px, 2vw, 50px);
 	display:inline-block;
 	cursor:pointer;
 	color: #707070;
@@ -48,6 +48,7 @@ body {
   align-items: center;   
   border-radius: 5px;
   width: 100%;
+  max-width: 98px;
   height: 100%;
 }
 
@@ -58,8 +59,8 @@ body {
 
 .YellowLetter {
   background-color: #FEC64D;
-  width: 24vw;
-  max-width: 98px;
+  width: 25vw;
+  max-width: 100%;
   aspect-ratio: 1;
   border-radius: 5px;
   display: flex;
@@ -80,11 +81,11 @@ body {
 }
 
 .YellowLetterInput {
-  height: 40px;
-  width: 100%;
-  max-width: 100px;
+  height: 4vw;
+  width: 25vw;
+  max-width: 95%;
   border-radius: 5px;
-  font-size: 30px;
+  font-size: clamp(10px, 4vw, 30px);
   display: flex;
   justify-content: center;
   color: #FEC64D;
@@ -117,6 +118,7 @@ body {
   width: 25vw;
   max-width: 100px;
   margin: 1vw;
+  overflow: hidden;
 }
 
 .GreenLetters {

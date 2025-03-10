@@ -1,5 +1,4 @@
 import { Link, Outlet } from 'react-router-dom'
-import github_logo from './img/github_logo.png'
 import vordli_logo from './img/vordli_logo.png'
 
 const Layout = () => {
@@ -27,9 +26,6 @@ const Header = () => {
 const Footer = () => {
     return ( 
         <div>
-            <Link to='https://github.com/rorour/VordliHelper/'>
-                <img style={{height:"30px"}} src={github_logo} alt="GitHub" />
-            </Link>
         </div>
      );
 }
