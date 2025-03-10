@@ -56,7 +56,7 @@ const QueryBuilder = () => {
     };
 
     const isValidLetter = (letter) => {
-        return letter !== "" && ALPHABET.includes(letter);
+        return ALPHABET.includes(letter);
     };
 
     const setGreenLetter = (index, value) => {
@@ -73,7 +73,7 @@ const QueryBuilder = () => {
 
     const setYellowLetter = (index, value) => {
         value = value.toUpperCase()
-        if (! isValidLetter(value)) {
+        if (value === "" || ! isValidLetter(value)) {
             return;
         }
         setYellowLetters(prevItems => {
