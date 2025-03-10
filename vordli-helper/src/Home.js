@@ -229,7 +229,7 @@ const QueryBuilder = () => {
             <div className="GrayLetters">
                 <GrayLetterInput props={getLetterZoneProps(letterFields.GRAY_LETTERS)}></GrayLetterInput>
             </div>
-            <button onClick={handleSubmit}>Search</button> 
+            <button className="SearchButton" onClick={handleSubmit}>SUBMIT</button> 
         </div>
     );
 }

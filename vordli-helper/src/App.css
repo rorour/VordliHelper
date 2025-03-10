@@ -31,11 +31,21 @@ body {
   }
 }
 
+.SearchButton {
+	background-color:#2F2F2F;
+	border-radius:5px;
+  font-size: clamp(10px, 2vw, 50px);
+	display:inline-block;
+	cursor:pointer;
+	color: #707070;
+  border: 1px solid #707070;
+  margin: 5px;
+}
+
 .LetterInput {
   display: flex;
   justify-content: center;
   align-items: center;   
-  margin: 10px;
   border-radius: 5px;
   width: 100%;
   height: 100%;
@@ -48,15 +58,16 @@ body {
 
 .YellowLetter {
   background-color: #FEC64D;
-  width: 100px;
-  height: 100px;
-  margin: 10px;
+  width: 24vw;
+  max-width: 98px;
+  aspect-ratio: 1;
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 60px;
+  font-size: clamp(10px, 6vw, 50px);
   position: relative;
+  margin: 1vw auto;
 }
 
 .YellowLetterDelete {
@@ -70,7 +81,8 @@ body {
 
 .YellowLetterInput {
   height: 40px;
-  margin: 0 10px 10px;
+  width: 100%;
+  max-width: 100px;
   border-radius: 5px;
   font-size: 30px;
   display: flex;
@@ -79,6 +91,7 @@ body {
   border: 1px solid #FEC64D;
   cursor: copy;
   align-items: center;
+  margin: 0 auto;
 }
 
 .NotEditingYellowLetter {
@@ -95,13 +108,15 @@ body {
   height: 100%;
   background-color: #FEC64D;
   color: #FFFEFC;
-  font-size: 60px;
+  font-size: clamp(10px, 6vw, 50px);
   border-radius: 5px;
   text-align: center;
 }
 
 .LetterStack {
-  width: 120px;
+  width: 25vw;
+  max-width: 100px;
+  margin: 1vw;
 }
 
 .GreenLetters {
@@ -112,10 +127,15 @@ body {
 .GreenLetter {
   background-color: #28cc50;
   color: #FFFEFC;
-  width: 100px;
-  height: 100px;
-  font-size: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25vw;
+  max-width: 100px;
+  aspect-ratio: 1;
   border-radius: 5px;
+  position: relative;
+  margin: 1vw;
 }
 
 .EditingGreenLetter {
@@ -126,19 +146,23 @@ body {
   height: 100%;
   background-color: #28cc50;
   color: #FFFEFC;
-  font-size: 60px;
+  font-size: clamp(10px, 6vw, 50px);
   border-radius: 5px;
   text-align: center;
+  position: relative;
 }
 
 .NotEditingGreenLetter {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: clamp(10px, 6vw, 50px);
   width: 100%;
   height: 100%;
   background-color: #28cc50;
   border-radius: 5px;
+  position: relative;
+  text-align: center;
 }
 
 .GrayLetters {
@@ -147,11 +171,13 @@ body {
   align-items: center;
   background-color: #707070;
   color: #FFFEFC;
-  font-size: 60px;
+  font-size: 5vw;
+  height: auto;
+  min-height: 20vh;
+  width: 50vw;
   border-radius: 5px;
-  width: 50%;
-  height: 100px;
   margin: auto;
+  overflow-wrap: anywhere;
 }
 
 .EditingGrayLetters {
@@ -159,12 +185,13 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
   background-color: #707070;
   color: #FFFEFC;
-  font-size: 60px;
+  font-size: 5vw;
   border-radius: 5px;
   text-align: center;
+  height: 100%;
+  min-height: 20vh;
 }
 
 .NotEditingGrayLetters {
@@ -172,9 +199,10 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
   background-color: #707070;
   border-radius: 5px;
+  height: 100%;
+  min-height: 20vh;
 }
 
 .QueryBuilder {
