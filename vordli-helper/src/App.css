@@ -221,8 +221,8 @@ body {
   color: white;
   text-align: center;
   display: inline-block;
-  font-size: 40px;
-  margin: 5px;
+  font-size: clamp(20px, 2vw, 2vw);
+  margin: 2px;
 }
 
 .ModalOverlay {
