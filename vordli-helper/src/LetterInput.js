@@ -136,7 +136,6 @@ export const LetterStack = ({props}) => {
 
 export const YellowLetterDisplay = ({props}) => {
   const handleDelete = () => {
-    console.log('called 1')
     props.delete(props.index, props.value)
   };
 

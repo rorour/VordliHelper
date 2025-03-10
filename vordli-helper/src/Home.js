@@ -87,15 +87,10 @@ const QueryBuilder = () => {
     };
 
     const deleteYellowLetter = (index, value) => {
-        console.log('called 2')
-
         setYellowLetters(prevItems => {
-            console.log(prevItems, prevItems[index])
             if (!Array.isArray(prevItems[index])) {
                 return prevItems;
             }
-
-            console.log('removing value', value, ' from index ', index)
             const newItems = {...prevItems};
             const newStackItems = [...newItems[index]];
             const i = newStackItems.indexOf(value);
@@ -159,8 +154,12 @@ const QueryBuilder = () => {
                 return response.json();
             })
             .then((json) => {
-                console.log("Response from Lambda:", json)
-                setSolutions(JSON.stringify(json));
+                let s = JSON.stringify(json)
+                if (s === "[]") {
+                    setSolutions(null);
+                } else {
+                    setSolutions(s);
+                }
             })
             .catch(error => console.error("Error:", error));
     
@@ -198,7 +197,7 @@ const QueryBuilder = () => {
                 </Modal>
                 <Modal isOpen={isSolutionModalOpen} onClose={() => setIsSolutionModalOpen(false)}>
                     <div className="SolutionScrollbox">
-                    {solutions && solutions !== "" ? (
+                    {solutions && solutions !== "null" && solutions !== "" && (
                     <table>
                         <tbody>
                             {JSON.parse(solutions).map((solution, index) => (
@@ -209,9 +208,12 @@ const QueryBuilder = () => {
                             ))}
                         </tbody>
                     </table>
-                    ) : (
-                        <p>...</p>
                     )}
+                    {(solutions === "") && 
+                    (<div>Loading...</div>)
+                    }
+                    {solutions === null && (<div>No matching words found. <br></br>Соответствующих слов не найдено.</div>)}
+
                     </div>
                 </Modal>
             </div>
