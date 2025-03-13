@@ -1,9 +1,13 @@
 import { createPortal } from "react-dom";
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, onClose, children }: { 
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) => {
   useEffect(() => {
-    const handleEsc = (e) => {
+    const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", handleEsc);

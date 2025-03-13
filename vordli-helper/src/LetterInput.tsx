@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const GreenLetterInput = ({ props }) => {
+export const GreenLetterInput = ({ props }: {props: any}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(props.getter[props.index] ?? '');
 
@@ -10,8 +10,8 @@ export const GreenLetterInput = ({ props }) => {
     }
   }, [props.getter, props.index, isEditing]);
 
-  const handleInputChange = (e) => {
-    setText(e.target.value);
+  const handleInputChange = (e: React.ChangeEvent) => {
+    setText((e.target as HTMLInputElement).value);
   };
 
   const handleBlur = () => {
@@ -29,7 +29,7 @@ export const GreenLetterInput = ({ props }) => {
           onChange={handleInputChange}
           onBlur={handleBlur}
           className="EditingGreenLetter"
-          maxLength="1"
+          maxLength={1}
         />
       ) : (
         <div
@@ -44,7 +44,7 @@ export const GreenLetterInput = ({ props }) => {
 };
 
 
-export const YellowLetterInput = ({props}) => {
+export const YellowLetterInput = ({ props }: {props: any}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState("");
   
@@ -61,7 +61,7 @@ export const YellowLetterInput = ({props}) => {
                 props.setter(props.index, text);
             }}
             className="EditingYellowLetter"
-            maxLength="1"
+            maxLength={1}
             />
         ) : (
             <div
@@ -78,7 +78,7 @@ export const YellowLetterInput = ({props}) => {
   );
 };
 
-export const GrayLetterInput = ({props}) => {
+export const GrayLetterInput = ({ props }: {props: any}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(props.getter[props.index] ?? '');
 
@@ -88,8 +88,8 @@ export const GrayLetterInput = ({props}) => {
     }
   }, [props.getter, isEditing]);
 
-  const handleInputChange = (e) => {
-    setText(e.target.value);
+  const handleInputChange = (e: React.ChangeEvent) => {
+    setText((e.target as HTMLInputElement).value);
   };
 
   const handleBlur = () => {
@@ -107,7 +107,7 @@ export const GrayLetterInput = ({props}) => {
             onChange={handleInputChange}
             onBlur={handleBlur}
             className="EditingGrayLetters"
-            maxLength="33"
+            maxLength={33}
             />
         ) : (
             <div
@@ -121,12 +121,12 @@ export const GrayLetterInput = ({props}) => {
   );
 };
 
-export const LetterStack = ({props}) => {
+export const LetterStack = ({ props }: {props: any}) => {
   return (
       <div className="LetterStack">
           <YellowLetterInput props={props}></YellowLetterInput>
           {
-              (Array.isArray(props.arr) ? props.arr : []).map((value, i) => (
+              (Array.isArray(props.arr) ? props.arr : []).map((value: string) => (
                   <YellowLetterDisplay key={value} props={{value: value, ...props}}></YellowLetterDisplay>
               ))
           }
@@ -134,7 +134,7 @@ export const LetterStack = ({props}) => {
   );
 }
 
-export const YellowLetterDisplay = ({props}) => {
+export const YellowLetterDisplay = ({ props }: {props: any}) => {
   const handleDelete = () => {
     props.delete(props.index, props.value)
   };

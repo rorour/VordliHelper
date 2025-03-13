@@ -15,51 +15,61 @@ const Home = () => {
  
 const QueryBuilder = () => {
     const [grayLetters, setGrayLetters] = useState("");
-    const [greenLetters, setGreenLetters] = useState({}); // dict position: str value
+    const [greenLetters, setGreenLetters] = useState<{ [key: number]: string }>({});
     const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
     const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
     const [isSolutionModalOpen, setIsSolutionModalOpen] = useState(false);
     const [numLettersInSolution, setnumLettersInSolution] = useState(5);
-    const [solutions, setSolutions] = useState("");
-    const [yellowLetters, setYellowLetters] = useState({}); // dict position: list of str
+    const [solutions, setSolutions] = useState<string | null>(null);
+    const [yellowLetters, setYellowLetters] = useState<{ [key: number]: string[] }>({});
     const ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
 
     const letterFields = {
         YELLOW_LETTERS: "yellowLetters",
         GRAY_LETTERS: "grayLetters",
         GREEN_LETTERS: "greenLetters",
-    };
-
-    const getLetterZoneProps = (zone, index) => {
+    } as const;
+    
+    type LetterField = (typeof letterFields)[keyof typeof letterFields];
+    
+    interface LetterZoneProps {
+        getter?: any;
+        setter?: Function;
+        innerClass?: string;
+        index?: number;
+        delete?: Function;
+    }
+    
+    const getLetterZoneProps = (zone: LetterField, index?: number): LetterZoneProps => {
         switch (zone) {
-            case letterFields.GRAY_LETTERS:
-                return {
-                    getter: grayLetters,
-                    setter: updateGrayLetters,
-                };
-            case letterFields.GREEN_LETTERS:
-                return {
-                    innerClass: "GreenLetter",
-                    getter: greenLetters,
-                    setter: setGreenLetter,
-                    index: index,
-                };
-            case letterFields.YELLOW_LETTERS:
-                return {
-                    setter: setYellowLetter,
-                    delete: deleteYellowLetter,
-                    index: index,
-                };
-            default:
-                return {};
+        case letterFields.GRAY_LETTERS:
+            return {
+            getter: grayLetters,
+            setter: updateGrayLetters,
+            };
+        case letterFields.GREEN_LETTERS:
+            return {
+            innerClass: "GreenLetter",
+            getter: greenLetters,
+            setter: setGreenLetter,
+            index,
+            };
+        case letterFields.YELLOW_LETTERS:
+            return {
+            setter: setYellowLetter,
+            delete: deleteYellowLetter,
+            index,
+            };
+        default:
+            return {};
         }
-    };
+    };  
 
-    const isValidLetter = (letter) => {
+    const isValidLetter = (letter: string) => {
         return ALPHABET.includes(letter);
     };
 
-    const setGreenLetter = (index, value) => {
+    const setGreenLetter = (index: number, value: string) => {
         value = value.toUpperCase()
         if (! isValidLetter(value)) {
             return;
@@ -71,7 +81,7 @@ const QueryBuilder = () => {
         });
     };
 
-    const setYellowLetter = (index, value) => {
+    const setYellowLetter = (index: number, value: string) => {
         value = value.toUpperCase()
         if (value === "" || ! isValidLetter(value)) {
             return;
@@ -86,7 +96,7 @@ const QueryBuilder = () => {
         });
     };
 
-    const deleteYellowLetter = (index, value) => {
+    const deleteYellowLetter = (index: number, value: string) => {
         setYellowLetters(prevItems => {
             if (!Array.isArray(prevItems[index])) {
                 return prevItems;
@@ -103,14 +113,14 @@ const QueryBuilder = () => {
         
     };
 
-    const updateGrayLetters = (values) => {
+    const updateGrayLetters = (values: string) => {
         const newItems = [
             ...new Set((values ?? "").split('').map(value => value.toUpperCase()))
         ].filter(value => ALPHABET.includes(value)).join("");
         setGrayLetters(newItems);
     };
 
-    const handleChangeNumLetters = (event) => {
+    const handleChangeNumLetters = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setnumLettersInSolution(Number(event.target.value));
     };
 
@@ -120,7 +130,7 @@ const QueryBuilder = () => {
         setYellowLetters(Object.fromEntries([...Array(numLettersInSolution).keys()].map(i => [i, []])));
     }, [numLettersInSolution]);
     
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const grayNotEmpty = grayLetters.trim() !== "";
         const greenNotEmpty = Object.values(greenLetters).some(str => str.trim() !== "");
@@ -149,7 +159,7 @@ const QueryBuilder = () => {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(response.status);
+                    throw new Error(String(response.status));
                 }
                 return response.json();
             })
@@ -200,7 +210,7 @@ const QueryBuilder = () => {
                     {solutions && solutions !== "null" && solutions !== "" && (
                     <table>
                         <tbody>
-                            {JSON.parse(solutions).map((solution, index) => (
+                            {JSON.parse(solutions).map((solution: Record<string, any>, index: number) => (
                                 <tr key={index}>
                                     <td><b>{solution.word}</b></td>
                                     <td>{solution.translation}</td>
@@ -229,7 +239,7 @@ const QueryBuilder = () => {
                 {Object.keys(yellowLetters).map((index) => (
                     <LetterStack 
                         key={index} 
-                        props={{ arr: yellowLetters[index], ...getLetterZoneProps(letterFields.YELLOW_LETTERS, Number(index)) }}
+                        props={{ arr: yellowLetters[Number(index)], ...getLetterZoneProps(letterFields.YELLOW_LETTERS, Number(index)) }}
                     />
                 ))}
             </div>
