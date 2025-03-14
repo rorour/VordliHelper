@@ -12,6 +12,15 @@ const Home = () => {
         </div>
      );
 }
+
+const VideoPlayer: React.FC = () => {
+    return (
+      <video className="Video" controls>
+        <source src="./tutorial-video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    );
+  };  
  
 const QueryBuilder = () => {
     const [grayLetters, setGrayLetters] = useState("");
@@ -198,8 +207,8 @@ const QueryBuilder = () => {
                     </div>
                 </Modal>
                 <Modal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)}>
-                    <div>my help contents</div>
-                    <div>
+                    <VideoPlayer></VideoPlayer>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
                         <Link to='https://github.com/rorour/VordliHelper/'>
                             <img style={{height:"30px"}} src={github_logo} alt="GitHub" />
                         </Link>
