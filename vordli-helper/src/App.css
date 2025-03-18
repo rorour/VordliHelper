@@ -243,6 +243,7 @@ body {
   width: 100vw;
   max-width: 350px;
   height: auto;
+  max-height: 60vh;
 }
 
 .ModalContent {
