@@ -240,7 +240,8 @@ body {
 
 .Video {
   z-index: 9999;
-  width: 350px;
+  width: 100vw;
+  max-width: 350px;
   height: auto;
 }
 
@@ -248,8 +249,17 @@ body {
   background: #707070;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  width: 400px;
+  width: 40vw;
+  max-width: 400px;
   position: relative;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .ModalContent {
+    width: 80vw;
+    max-width: none;
+  }
 }
 
 .ModalClose { 
