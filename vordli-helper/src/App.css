@@ -253,6 +253,7 @@ body {
   max-width: 400px;
   position: relative;
   margin: 0 auto;
+  overflow-y: auto;
 }
 
 @media (max-width: 768px) {
@@ -293,6 +294,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .SolutionScrollbox { 
