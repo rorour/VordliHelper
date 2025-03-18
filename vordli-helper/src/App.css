@@ -264,6 +264,7 @@ body {
   .Video {
     width: 79vw;
     max-width: none;
+    max-height: 68vh;
   }
 }
 
