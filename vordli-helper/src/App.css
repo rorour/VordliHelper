@@ -240,10 +240,10 @@ body {
 
 .Video {
   z-index: 9999;
-  width: 100vw;
-  max-width: 350px;
+  width: 39vw;
+  max-width: 380px;
   height: auto;
-  max-height: 60vh;
+  max-height: 70vh;
 }
 
 .ModalContent {
@@ -262,9 +262,8 @@ body {
     max-width: none;
   }
   .Video {
-    width: 80%;
+    width: 79vw;
     max-width: none;
-    max-height: 50vh;
   }
 }
 
@@ -289,6 +288,7 @@ body {
   padding: 20px;
   color: black;
   font-family: Helvetica, Arial, sans-serif;
+  justify-content: center;
 }
 
 .SolutionScrollbox { 
