@@ -235,7 +235,7 @@ body {
   display: flex;
   justify-content: center;
   z-index: 9998; 
-  align-items: flex-start;
+  align-items: center;
 }
 
 .Video {
