@@ -1,4 +1,4 @@
-## [vordlihelper.com](https://vordlihelper.com)
+## [vordlihelper]([https://vordlihelper.com](http://vordlihelper.s3-website-us-east-1.amazonaws.com))
 
 To help Russian language learners play the game Вордли.
 
